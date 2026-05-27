@@ -2,7 +2,7 @@
 
 ¡Bienvenido a la Trivia del Mundial 2026! Una aplicación interactiva en tiempo real donde podés competir con tus amigos y coleccionar las figuritas de la Selección Argentina.
 
-🌐 **Podés acceder a la app en producción desde este enlace:** [https://trivia-mauve-six.vercel.app/](https://trivia-mauve-six.vercel.app/)
+🌐 **Podés acceder a la app en producción desde este enlace:** [https://trivia-del-mundial.vercel.app/](https://trivia-del-mundial.vercel.app/)
 
 ---
 
