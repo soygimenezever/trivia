@@ -317,11 +317,13 @@ function App() {
     }
   };
 
+  let contenidoPantalla;
+
   // RENDER: MENÚ PRINCIPAL
   if (!salaId || !sala) {
     const haySalaExpandida = salaSeleccionada !== null;
 
-    return (
+    contenidoPantalla = (
       <div className="lobby">
         <h1>🏆 Trivia del Mundial 🏆</h1>
         
@@ -408,8 +410,8 @@ function App() {
   }
 
 // RENDER: ESPERA EN LOBBY
-  if (sala.estado === 'esperando') {
-    return (
+  else if (sala.estado === 'esperando') {
+    contenidoPantalla = (
       <div className="lobby-espera-container">
         {/* Tarjeta Principal */}
         <div className="lobby">
@@ -429,7 +431,7 @@ function App() {
   }
 
   // RENDER: FIN DEL JUEGO
-  if (sala.estado === 'terminado') {
+  else if (sala.estado === 'terminado') {
     let mensajeGanador = "Empate 🤝";
     if (sala.puntos_j1 > sala.puntos_j2) {
       mensajeGanador = `Ganador: 🏆 <strong>${sala.jugador1}</strong>`;
@@ -437,7 +439,7 @@ function App() {
       mensajeGanador = `Ganador: 🏆 <strong>${sala.jugador2}</strong>`;
     }
 
-    return (
+    contenidoPantalla = (
       <div className="lobby">
         <h2>🎉 ¡Fin del Juego! 🎉</h2>
         <p dangerouslySetInnerHTML={{ __html: mensajeGanador }}></p>
@@ -454,111 +456,129 @@ function App() {
     );
   }
 
-  // Extraemos dinámicamente la pregunta actual de la tanda mezclada
-  const pregunta = preguntasDeLaPartida[sala.pregunta_actual];
+  else {
 
-  // RENDER: MESA DE TRIVIA ACTIVA
-  return (
-    <div className="game-container">
-      <div className="marcador">
-        <span>
-          <strong>{sala.jugador1}</strong> • <span>🎯 {sala.puntos_j1}</span>
-        </span>
-        <button onClick={abandonarPartida} className="btn-salir-mini">Salir 🚪</button>
-        <span>
-          <strong>{sala.jugador2 ? sala.jugador2 : 'Jugador 2'}</strong> • <span>🎯 {sala.puntos_j2}</span>
-        </span>
-      </div>
+    // Extraemos dinámicamente la pregunta actual de la tanda mezclada
+    const pregunta = preguntasDeLaPartida[sala.pregunta_actual];
 
-      <div className="trivia-card">
-        {transicionando || !pregunta ? (
-          <div className="loader-pregunta">Cargando siguiente pregunta...</div>
-        ) : (
-          <>
-            <h3>Pregunta {sala.pregunta_actual + 1} de 5</h3>
-            <h2>{pregunta.q}</h2>
+    // RENDER: MESA DE TRIVIA ACTIVA
+    contenidoPantalla = (
+      <div className="game-container">
+        <div className="marcador">
+          <span>
+            <strong>{sala.jugador1}</strong> • <span>🎯 {sala.puntos_j1}</span>
+          </span>
+          <button onClick={abandonarPartida} className="btn-salir-mini">Salir 🚪</button>
+          <span>
+            <strong>{sala.jugador2 ? sala.jugador2 : 'Jugador 2'}</strong> • <span>🎯 {sala.puntos_j2}</span>
+          </span>
+        </div>
 
-            <div className="trivia-dinamica">
-              <div className="contenedor-estatico-dom">
-                {!rondaBloqueada ? (
-                  <>
-                    <div className="opciones-grid">
-                      {pregunta.opciones.map((opc, idx) => (
-                        <button 
-                          key={`opc-${sala.pregunta_actual}-${idx}`} 
-                          onClick={() => responder(opc)} 
-                          className="btn-opcion"
-                        >
-                          {opc}
-                        </button>
-                      ))}
+        <div className="trivia-card">
+          {transicionando || !pregunta ? (
+            <div className="loader-pregunta">Cargando siguiente pregunta...</div>
+          ) : (
+            <>
+              <h3>Pregunta {sala.pregunta_actual + 1} de 5</h3>
+              <h2>{pregunta.q}</h2>
+
+              <div className="trivia-dinamica">
+                <div className="contenedor-estatico-dom">
+                  {!rondaBloqueada ? (
+                    <>
+                      <div className="opciones-grid">
+                        {pregunta.opciones.map((opc, idx) => (
+                          <button 
+                            key={`opc-${sala.pregunta_actual}-${idx}`} 
+                            onClick={() => responder(opc)} 
+                            className="btn-opcion"
+                          >
+                            {opc}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="trivia-recordatorio-sobres">
+                          🎁 Por cada respuesta correcta te ganás <strong>2 figuritas</strong> para el álbum. ¡Apurate y conseguí las <strong>10</strong> para ganar!
+                      </p>
+                    </>
+                  ) : (
+                    <div className="ronda-resultado" key={`resultado-${sala.pregunta_actual}`}>
+                      <p className="ganador-aviso">
+                        <span>🚀 ¡</span>
+                        <strong>{sala.ganador_ronda || "Alguien"}</strong>
+                        <span> respondió primero!</span>
+                      </p>
+                      <button onClick={siguientePregunta} className="btn-siguiente">
+                        Siguiente Pregunta ➡️
+                      </button>
                     </div>
-                    <p className="trivia-recordatorio-sobres">
-                        🎁 Por cada respuesta correcta te ganás <strong>2 figuritas</strong> para el álbum. ¡Apurate y conseguí las <strong>10</strong> para ganar!
-                    </p>
-                  </>
-                ) : (
-                  <div className="ronda-resultado" key={`resultado-${sala.pregunta_actual}`}>
-                    <p className="ganador-aviso">
-                      <span>🚀 ¡</span>
-                      <strong>{sala.ganador_ronda || "Alguien"}</strong>
-                      <span> respondió primero!</span>
-                    </p>
-                    <button onClick={siguientePregunta} className="btn-siguiente">
-                      Siguiente Pregunta ➡️
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className="contenedor-sobre-estable" style={{ minHeight: mensajeSobre && !transicionando ? 'auto' : '0px' }}>
-        {mensajeSobre && !transicionando && (
-          <div key={`sobre-${sala.pregunta_actual}`} className="sobre-abierto animate-pop">
-            <h3>¡Tu Sobre Trajo 2 Figuritas! 🎁</h3>
-            <div className="figus-ganadas">
-              {mensajeSobre.map((f, i) => (
-                <div key={`figu-ganada-${f.id}-${i}`} className="figu-card">
-                  <img src={f.imagen} alt={f.name} className="figu-foto-card" /> 
-                  <p>{f.name}</p>
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* ÁLBUM DINÁMICO REFACTORIZADO: Muestra únicamente los slots de las 10 figuritas de esta partida */}
-      <div className="mi-album">
-        <h3>Tu Álbum de la Partida ({misFigus.length} obtenidas)</h3>
-        <p style={{ fontSize: '0.85rem', color: '#aaa', marginTop: '-5px', marginBottom: '15px' }}>
-          ¡Respondé bien para descubrir las 10 figuritas ocultas de esta sala!
-        </p>
-        <div className="album-grid">
-          {FIGURITAS_PARTIDA.map(f => {
-            const repetidas = misFigus.filter(mf => mf.id === f.id).length;
-            return (
-              <div key={`slot-${f.id}`} className={`slot ${repetidas > 0 ? 'activo' : ''}`}>
-                {repetidas > 0 ? (
-                  <div key="con-figu" className="slot-interno">
-                    <img src={f.imagen} alt={f.name} className="album-foto-slot" />
-                    <p>{f.name}</p>
-                    {repetidas > 1 && <span className="badge">x{repetidas}</span>}
-                  </div>
-                ) : (
-                  <div key="sin-figu" className="slot-interno">
-                    {/* Al principio se renderizará oculto, mostrando solo su ID de slot */}
-                    <span className="numero">#{f.id}</span>
-                  </div>
-                )}
               </div>
-            );
-          })}
+            </>
+          )}
+        </div>
+
+        <div className="contenedor-sobre-estable" style={{ minHeight: mensajeSobre && !transicionando ? 'auto' : '0px' }}>
+          {mensajeSobre && !transicionando && (
+            <div key={`sobre-${sala.pregunta_actual}`} className="sobre-abierto animate-pop">
+              <h3>¡Tu Sobre Trajo 2 Figuritas! 🎁</h3>
+              <div className="figus-ganadas">
+                {mensajeSobre.map((f, i) => (
+                  <div key={`figu-ganada-${f.id}-${i}`} className="figu-card">
+                    <img src={f.imagen} alt={f.name} className="figu-foto-card" /> 
+                    <p>{f.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ÁLBUM DINÁMICO REFACTORIZADO: Muestra únicamente los slots de las 10 figuritas de esta partida */}
+        <div className="mi-album">
+          <h3>Tu Álbum de la Partida ({misFigus.length} obtenidas)</h3>
+          <p style={{ fontSize: '0.85rem', color: '#aaa', marginTop: '-5px', marginBottom: '15px' }}>
+            ¡Respondé bien para descubrir las 10 figuritas ocultas de esta sala!
+          </p>
+          <div className="album-grid">
+            {FIGURITAS_PARTIDA.map(f => {
+              const repetidas = misFigus.filter(mf => mf.id === f.id).length;
+              return (
+                <div key={`slot-${f.id}`} className={`slot ${repetidas > 0 ? 'activo' : ''}`}>
+                  {repetidas > 0 ? (
+                    <div key="con-figu" className="slot-interno">
+                      <img src={f.imagen} alt={f.name} className="album-foto-slot" />
+                      <p>{f.name}</p>
+                      {repetidas > 1 && <span className="badge">x{repetidas}</span>}
+                    </div>
+                  ) : (
+                    <div key="sin-figu" className="slot-interno">
+                      {/* Al principio se renderizará oculto, mostrando solo su ID de slot */}
+                      <span className="numero">#{f.id}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
+    );
+  }
+
+  // 2. UN ÚNICO RETURN GLOBAL PARA TODA LA APP
+  return (
+    <div className="app-layout-global">
+      
+      {/* Acá se va a inyectar la pantalla que corresponda automáticamente */}
+      {contenidoPantalla}
+
+      {/* FOOTER GENERAL: Se escribe una sola vez y aparece siempre abajo */}
+      <footer className="footer-creador">
+        <p>Desarrollado por <span>Gimenez Ever</span> | © 2026</p>
+      </footer>
+
     </div>
   );
 }

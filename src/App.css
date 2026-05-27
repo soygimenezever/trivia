@@ -622,3 +622,46 @@ button:active {
   color: #222;
   font-weight: 700;
 }
+
+/* Estilos para el Footer General */
+.footer-creador {
+  width: 100%;
+  margin-top: auto; /* Empuja el footer hacia el fondo del contenedor si hay espacio */
+  padding: 20px 0 10px 0;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer-creador p {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.footer-creador p span {
+  color: #ff9800; /* Usa el color naranja característico de tus badges */
+  font-weight: 700;
+}
+
+/* Ajuste opcional para los contenedores principales (.lobby y .game-container) 
+   para garantizar que se comporten como cajas flexibles verticales */
+.lobby, .game-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 92vh; /* Asegura que cubra casi toda la pantalla y deje el footer abajo */
+}
+
+.app-layout-global {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ocupa el 100% del alto de la pantalla */
+}
+
+.footer-creador {
+  margin-top: auto; /* Empuja mágicamente el footer hacia abajo si el contenido es corto */
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+}
