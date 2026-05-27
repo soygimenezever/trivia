@@ -1,3 +1,11 @@
+# 🏆 Trivia del Mundial 2026 🏆
+
+¡Bienvenido a la Trivia del Mundial 2026! Una aplicación interactiva en tiempo real donde podés competir con tus amigos y coleccionar las figuritas de la Selección Argentina.
+
+🌐 **Podés acceder a la app en producción desde este enlace:** [https://trivia-mauve-six.vercel.app/](https://trivia-mauve-six.vercel.app/)
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
