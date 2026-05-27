@@ -537,3 +537,88 @@ button:active {
   object-fit: cover;
   border-radius: 4px;
 }
+
+/* Contenedor general para centrar la tarjeta y el loading inferior */
+.lobby-espera-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 25px; /* Espacio entre la tarjeta y el loading de abajo */
+}
+
+/* Caja del loading externo */
+.loading-externo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.loading-externo-box p {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Spinner con efecto de pulso circular */
+.spinner-pulso {
+  width: 40px;
+  height: 40px;
+  background-color: #ff9800; /* Puedes cambiarlo por el color naranja de tu badge O6EE */
+  border-radius: 50%;
+  position: relative;
+}
+
+.spinner-pulso::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #ff9800;
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulsarOnda 1.5s infinite ease-out;
+  opacity: 0.7;
+}
+
+/* Animaciones */
+@keyframes pulsarOnda {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.trivia-recordatorio-sobres {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  background-color: #f7f9fc;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800; /* Combina con el naranja del badge de la sala */
+  text-align: center;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.trivia-recordatorio-sobres strong {
+  color: #222;
+  font-weight: 700;
+}

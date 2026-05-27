@@ -407,14 +407,23 @@ function App() {
     );
   }
 
-  // RENDER: ESPERA EN LOBBY
+// RENDER: ESPERA EN LOBBY
   if (sala.estado === 'esperando') {
     return (
-      <div className="lobby">
-        <h2>Sala: <span className="codigo">{sala.id}</span></h2>
-        <p>Pasale este código a tu amigo para jugar.</p>
-        <div className="loader">⏳ Esperando al contrincante...</div>
-        <button onClick={abandonarPartida} className="btn-abandonar">Volver al Menú 🏠</button>
+      <div className="lobby-espera-container">
+        {/* Tarjeta Principal */}
+        <div className="lobby">
+          <h2>Sala: <span className="codigo">{sala.id}</span></h2>
+          <p>Pasale este código a tu amigo para jugar.</p>
+          <div className="loader">⏳ Esperando al contrincante...</div>
+          <button onClick={abandonarPartida} className="btn-abandonar">Volver al Menú 🏠</button>
+        </div>
+
+        {/* Indicador de carga externo (debajo de la card) */}
+        <div className="loading-externo-box">
+          <div className="spinner-pulso"></div>
+          <p>Buscando rivales activos en la red...</p>
+        </div>
       </div>
     );
   }
@@ -432,8 +441,8 @@ function App() {
       <div className="lobby">
         <h2>🎉 ¡Fin del Juego! 🎉</h2>
         <p dangerouslySetInnerHTML={{ __html: mensajeGanador }}></p>
-        <p>{sala.jugador1}: {sala.puntos_j1 * 2} figuras</p>
-        <p>{sala.jugador2}: {sala.puntos_j2 * 2} figuras</p>
+        <p>{sala.jugador1}: {sala.puntos_j1} puntos</p>
+        <p>{sala.jugador2}: {sala.puntos_j2} puntos</p>
         
         <button onClick={() => {
           limpiarSesionLocal(); 
@@ -472,17 +481,22 @@ function App() {
             <div className="trivia-dinamica">
               <div className="contenedor-estatico-dom">
                 {!rondaBloqueada ? (
-                  <div className="opciones-grid">
-                    {pregunta.opciones.map((opc, idx) => (
-                      <button 
-                        key={`opc-${sala.pregunta_actual}-${idx}`} 
-                        onClick={() => responder(opc)} 
-                        className="btn-opcion"
-                      >
-                        {opc}
-                      </button>
-                    ))}
-                  </div>
+                  <>
+                    <div className="opciones-grid">
+                      {pregunta.opciones.map((opc, idx) => (
+                        <button 
+                          key={`opc-${sala.pregunta_actual}-${idx}`} 
+                          onClick={() => responder(opc)} 
+                          className="btn-opcion"
+                        >
+                          {opc}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="trivia-recordatorio-sobres">
+                        🎁 Por cada respuesta correcta te ganás <strong>2 figuritas</strong> para el álbum. ¡Apurate y conseguí las <strong>10</strong> para ganar!
+                    </p>
+                  </>
                 ) : (
                   <div className="ronda-resultado" key={`resultado-${sala.pregunta_actual}`}>
                     <p className="ganador-aviso">
